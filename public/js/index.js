@@ -9,24 +9,27 @@ let game = null;
     }
   )
   modalBtn.addEventListener('click', function(){
-    startGame();
+    play();
     return;
   })
 })();
 function newGame(){
   let name1 = 'Jon' || document.getElementById('playerOneName').value;
-  let name1Node = document.createTextNode(name1);
-  document.getElementById('playOneName').appendChild(name1Node);
   let name2 = 'Shaina' || document.getElementById('playerTwoName').value;
-  let name2Node = document.createTextNode(name2);
-  document.getElementById('playTwoName').appendChild(name2Node);
   if(name1.length < 2 || name2.length < 2){
     return {error: 'please enter more than 2 characters'};
   }
+  playerInfoToDom(name1,name2);
   game = new Game(name1, name2);
   return {success: 'game started'};
 }
-function startGame(){
+function playerInfoToDom(name1, name2){
+  let name1Node = document.createTextNode(name1);
+  document.getElementById('playOneName').appendChild(name1Node);
+  let name2Node = document.createTextNode(name2);
+  document.getElementById('playTwoName').appendChild(name2Node);
+}
+function play(){
   let modal = document.getElementById('modal');
   let response = newGame();
   if(response.error){
@@ -46,7 +49,6 @@ function addToCompare(id, index){
 function showCards(){
   if(game !== null){
     let handOne = game.players[0].hand.map((card,index)=>{
-      console.log(card.toString())
       let newDiv = document.createElement('div');
       let newNode = document.createTextNode(card);
       let hand = document.getElementById('handOne');
