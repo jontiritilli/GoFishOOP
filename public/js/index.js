@@ -3,11 +3,6 @@ let game = null;
 (function addEventHandlers(){
   let cardpool = document.getElementById('cardpool');
   let modalBtn = document.getElementById('modalBtn');
-  cardpool.addEventListener('click',
-    function(){
-      console.log('clicked')
-    }
-  )
   modalBtn.addEventListener('click', function(){
     play();
     return;
@@ -28,6 +23,7 @@ function playerInfoToDom(name1, name2){
   document.getElementById('playOneName').appendChild(name1Node);
   let name2Node = document.createTextNode(name2);
   document.getElementById('playTwoName').appendChild(name2Node);
+  return;
 }
 function play(){
   let modal = document.getElementById('modal');
@@ -36,49 +32,36 @@ function play(){
     console.log(response.error);
     return response.error;
   }
-  console.log(response.success);
   game.startGame();
   toggleShow(modal);
   showCards();
+  return;
 };
-function addToCompare(id, index){
-  console.log('id '+id+' index '+ index)
-  let player = game.players[id];
-  player.matchToCheck.push(player.hand[index]);
+function DOMCards(elementName='', elementClass='', array=[] ,callback){
+  array.map((card,index)=>{
+    let element = document.getElementById(elementName);
+    let img = document.createElement('img');
+    let src = document.createAttribute('src');
+    let cl = document.createAttribute('class');
+    src.value = card;
+    cl.value = elementClass;
+    img.setAttributeNode(src);
+    img.setAttributeNode(cl);
+    img.addEventListener('click', function(){
+      callback(0,index);
+    });
+    element.appendChild(img);
+  })
+  return;
 }
 function showCards(){
   if(game !== null){
-    let handOne = game.players[0].hand.map((card,index)=>{
-      let newDiv = document.createElement('div');
-      let newNode = document.createTextNode(card);
-      let hand = document.getElementById('handOne');
-      newDiv.appendChild(newNode);
-      newDiv.addEventListener('click', function(){
-        addToCompare(0,index)
-      });
-      hand.appendChild(newDiv);
-    })
-    let handTwo = game.players[1].hand.map((card,index)=>{
-      let newDiv = document.createElement('div');
-      let newNode = document.createTextNode(card);
-      let hand = document.getElementById('handTwo');
-      newDiv.appendChild(newNode);
-      newDiv.addEventListener('click', function(){
-        addToCompare(1,index)
-      });
-      hand.appendChild(newDiv);
-    })
-    let cardpool = game.deck.cards.map((card,index)=>{
-      let pool = document.getElementById('cardpool');
-      let newNode = document.createTextNode(card+',');
-      pool.appendChild(newNode);
-      /*newDiv.addEventListener('click', function(){
-        here's where i will add code to pick up cards
-      });*/
-    })
+    DOMCards('handOne', 'handImg', game.players[0].hand, game.addToCompare);
+    DOMCards('handTwo', 'handImg', game.players[1].hand, game.addToCompare);
+    DOMCards('cardpool', 'cardPoolImg', game.deck.cards, game.deck.giveCard);
   }
-  return
+  return;
 }
 function toggleShow(element){
-  element.classList.toggle('hidden')
+  return element.classList.toggle('hidden');
 }
