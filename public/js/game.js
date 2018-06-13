@@ -5,6 +5,7 @@ class Game {
     this.deck = new Deck;
     this.playerTurn = 0;
     this.addToCompare = this.addToCompare.bind(this);
+    this.drawCard = this.drawCard.bind(this);
   }
   startGame(){
     this.deck.createDeck();
@@ -18,7 +19,7 @@ class Game {
     let maxDeal = 10;
     let playerId = 0;
     while(maxDeal){
-      this.players[playerId].getCard(this.deck.giveCard());
+      this.players[playerId].getCard(this.deck.giveCard(0));
       maxDeal--;
       playerId = playerId === 0? 1 : 0;
     }
@@ -28,9 +29,9 @@ class Game {
     this.playerturn = this.playerTurn === 0 ? 1 : 0;
     return;
   }
-  drawCard(id){
-    let card = this.deck.giveCard();
-    this.players[id].getCard(card);
+  drawCard(index){
+    let card = this.deck.giveCard(index);
+    this.players[this.playerTurn].getCard(card);
     return this.playerTurn = this.playerTurn === 0 ? 1 : 0;
   }
   stealCard(id, index){
@@ -38,9 +39,8 @@ class Game {
     this.players[id].getCard(card);
     return this.playerTurn = this.playerTurn === 0 ? 1 : 0;
   }
-  addToCompare(unused, index){
+  addToCompare(index){
     let player = this.players[this.playerTurn];
-    console.log(player)
     player.createNextCheck(index);
     return;
   }

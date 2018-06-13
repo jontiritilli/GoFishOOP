@@ -37,9 +37,13 @@ function play(){
   showCards();
   return;
 };
-function DOMCards(elementName='', elementClass='', array=[] ,callback){
+function DOMCards(elementName='', elementClass='', array=[], callback, callback2){
+  let element = document.getElementById(elementName);
+  //empty div before building
+  while(element.firstChild){
+    element.removeChild(element.firstChild)
+  }
   array.map((card,index)=>{
-    let element = document.getElementById(elementName);
     let img = document.createElement('img');
     let src = document.createAttribute('src');
     let cl = document.createAttribute('class');
@@ -48,7 +52,8 @@ function DOMCards(elementName='', elementClass='', array=[] ,callback){
     img.setAttributeNode(src);
     img.setAttributeNode(cl);
     img.addEventListener('click', function(){
-      callback(0,index);
+      callback(index);
+      showCards();
     });
     element.appendChild(img);
   })
@@ -58,7 +63,7 @@ function showCards(){
   if(game !== null){
     DOMCards('handOne', 'handImg', game.players[0].hand, game.addToCompare);
     DOMCards('handTwo', 'handImg', game.players[1].hand, game.addToCompare);
-    DOMCards('cardpool', 'cardPoolImg', game.deck.cards, game.deck.giveCard);
+    DOMCards('cardpool', 'cardPoolImg', game.deck.cards, game.drawCard);
   }
   return;
 }

@@ -5,16 +5,22 @@ class Player {
       this.matches = [];
       this.nextMatchToCheck = [];
       this.playerId = id;
+      this.getCard = this.getCard.bind(this);
   }
   createNextCheck(index){
     let card = this.hand[index];
-    if(this.nextMatchToCheck.length<1){
-      return this.nextMatchToCheck.push(card);
+    if(this.nextMatchToCheck.length<2){
+      this.nextMatchToCheck.push(card);
     }
-    return this.checkMatches();
+    if(this.nextMatchToCheck.length===2){
+      this.checkMatches();
+    }
+    return;
   }
   checkMatches(){
-    if(this.nextMatchToCheck[0] === this.nextMatchToCheck[1]){
+    let cardNumOneIdx = this.nextMatchToCheck[0].lastIndexOf('/')+1;
+    let cardNumTwoIdx = this.nextMatchToCheck[1].lastIndexOf('/')+1;
+    if(this.nextMatchToCheck[0][cardNumOneIdx] === this.nextMatchToCheck[1][cardNumTwoIdx]){
       this.nextMatchToCheck = [];
       return console.log(true);
     }
