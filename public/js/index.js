@@ -36,14 +36,14 @@ function startGame(){
   console.log(response.success);
   game.startGame();
   toggleShow(modal);
-  showHands();
+  showCards();
 };
 function addToCompare(id, index){
   console.log('id '+id+' index '+ index)
   let player = game.players[id];
   player.matchToCheck.push(player.hand[index]);
 }
-function showHands(){
+function showCards(){
   if(game !== null){
     let handOne = game.players[0].hand.map((card,index)=>{
       console.log(card.toString())
@@ -65,6 +65,14 @@ function showHands(){
         addToCompare(1,index)
       });
       hand.appendChild(newDiv);
+    })
+    let cardpool = game.deck.cards.map((card,index)=>{
+      let pool = document.getElementById('cardpool');
+      let newNode = document.createTextNode(card+',');
+      pool.appendChild(newNode);
+      /*newDiv.addEventListener('click', function(){
+        here's where i will add code to pick up cards
+      });*/
     })
   }
   return
