@@ -3,12 +3,15 @@ class Player {
       this.hand = [];
       this.playerName = playerName;
       this.matches = [];
+      this.matchToCheck = [];
       this.playerId = id;
   }
-  checkMatches([card1,card2]){
-      if(this.hand[card1] === this.hand[card2]){
-          return true;
+  checkMatches(){
+      if(this.matchToCheck[0] === this.matchToCheck[1]){
+        this.matchToCheck = [];
+        return true;
       }
+      this.matchToCheck = [];
       return false;
   }
   getCard(card){
@@ -27,4 +30,3 @@ class Player {
       }
   }
 }
-export default Player;

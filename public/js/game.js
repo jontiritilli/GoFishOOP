@@ -1,6 +1,3 @@
-import Player from './player';
-import Deck from './player';
-
 class Game {
   constructor(playOne, playTwo){
       this.players = [new Player(0, playOne), new Player(1, playTwo)];

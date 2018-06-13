@@ -32,4 +32,3 @@ class Deck {
       return card;
   }
 }
-export default Deck;
