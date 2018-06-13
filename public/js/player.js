@@ -6,6 +6,7 @@ class Player {
       this.nextMatchToCheck = [];
       this.playerId = id;
       this.getCard = this.getCard.bind(this);
+      this.giveCard = this.giveCard.bind(this);
   }
   createNextCheck(index){
     let card = this.hand[index];
