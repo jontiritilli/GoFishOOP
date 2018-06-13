@@ -16,9 +16,9 @@ class Deck {
     }
     this.cards = shuffled;
   }
-  giveCard(){
-    const card = this.cards[0];
-    this.cards.splice(0,1);
+  giveCard(index){
+    const card = this.cards[index];
+    this.cards.splice(index,1);
     return card;
   }
 }
