@@ -4,8 +4,6 @@ class Game {
     this.scoreboard = [];
     this.deck = new Deck;
     this.playerTurn = 0;
-    this.addToCompare = this.addToCompare.bind(this);
-    this.drawCard = this.drawCard.bind(this);
   }
   startGame(){
     this.deck.createDeck();
@@ -26,22 +24,27 @@ class Game {
     return;
   }
   nextTurn(){
-    this.playerturn = this.playerTurn === 0 ? 1 : 0;
-    return;
+    if(this.playerTurn){
+      this.playerTurn--;
+      return this.playerTurn;
+    }
+    this.playerTurn++;
+    return this.playerTurn;
   }
-  drawCard(index){
-    let card = this.deck.giveCard(index);
+  drawCard(i){
+    const card = this.deck.giveCard(i);
     this.players[this.playerTurn].getCard(card);
-    return this.playerTurn = this.playerTurn === 0 ? 1 : 0;
+    this.nextTurn();
+    return this.playerTurn;
   }
-  stealCard(id, index){
-    let card = this.player.giveCard(index);
-    this.players[id].getCard(card);
-    return this.playerTurn = this.playerTurn === 0 ? 1 : 0;
-  }
-  addToCompare(index){
-    let player = this.players[this.playerTurn];
-    player.createNextCheck(index);
-    return;
+  pausePlayerClicks(){
+    let opponent = this.playerTurn===0? 1 : 0
+    let container = document.querySelectorAll('img[player]');
+    console.log(container);
+    let array = container.querySelectorAll('img[player='+this.playerTurn+']');
+    console.log(array);
+    array.forEach(function(card){
+
+    })
   }
 }
