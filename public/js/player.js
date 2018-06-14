@@ -1,47 +1,50 @@
 class Player {
-  constructor(id, playerName){
+  constructor(id, name){
       this.hand = [];
-      this.playerName = playerName;
-      this.matches = [];
+      this.playerName = name;
+      this.matches = 0;
+      this.discarded = [];
       this.nextMatchToCheck = [];
       this.playerId = id;
-      this.getCard = this.getCard.bind(this);
       this.giveCard = this.giveCard.bind(this);
   }
-  createNextCheck(index){
-    let card = this.hand[index];
-    if(this.nextMatchToCheck.length<2){
-      this.nextMatchToCheck.push(card);
+  createNextCheck(index,name){
+    if(!this.nextMatchToCheck.length){
+      this.nextMatchToCheck.push({index,name});
     }
-    if(this.nextMatchToCheck.length===2){
-      this.checkMatches();
+    if(this.nextMatchToCheck.length === 1 && this.nextMatchToCheck[0].name !== name){
+      this.nextMatchToCheck.push({index,name});
+      return this.checkMatches(this.nextMatchToCheck[0], this.nextMatchToCheck[1]);
     }
-    return;
+    return false;
   }
-  checkMatches(){
-    let cardNumOneIdx = this.nextMatchToCheck[0].lastIndexOf('/')+1;
-    let cardNumTwoIdx = this.nextMatchToCheck[1].lastIndexOf('/')+1;
-    if(this.nextMatchToCheck[0][cardNumOneIdx] === this.nextMatchToCheck[1][cardNumTwoIdx]){
+  checkMatches(card1, card2){
+    let index1 = card1.name.lastIndexOf('/')+1;
+    let index2 = card2.name.lastIndexOf('/')+1;
+    if(card1.name[index1] === card2.name[index2]){
+      this.matches++;
       this.nextMatchToCheck = [];
-      return console.log(true);
+      this.discardMatches([card1, card2]);
+      return true;
     }
     this.nextMatchToCheck = [];
-    return console.log(false);
+    return false;
+  }
+  discardMatches(cards){
+    let discards = this.giveCard(cards);
+    this.discarded = [...this.discarded, ...discards];
   }
   getCard(card){
-    return this.hand.push(card);
-  }
-  giveCard(index){
-    const cardToGive = this.hand.splice(index,1);
-    return cardToGive;
-  }
-  handToFive(id){
-    if(this.player[id].hand.length >= 5){
-      return;
-    }
-    while(this.player[id].hand.length <= 5){
-      this.player[id].hand.push(this.deck.giveCard());
-    }
+    this.hand.push(card);
     return;
+  }
+  giveCard(payload){
+    let dispatch = []
+    let cards = [...payload];
+    for(let card of cards){
+      dispatch.push(this.hand[card.index]);
+      this.hand = [...this.hand.slice(0,card.index),...this.hand.slice(card.index+1)];
+    }
+    return dispatch;
   }
 }
