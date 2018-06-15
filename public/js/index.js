@@ -8,14 +8,15 @@ let game = null;
   })
 })();
 function newGame(){
-  let p1 = 'Jon' || document.getElementById('p1Name').value;
-  let p2 = 'Shaina' || document.getElementById('p2Name').value;
-  if(p1.length < 2 || p2.length < 2){
-    return {error: 'please enter more than 2 characters'};
+  let players = ['Jon' || document.getElementById('p1Name').value, 'Shaina' || document.getElementById('p2Name').value];
+  for(let i of players){
+    if(i.length < 2){
+      return {error: 'please enter more than 2 characters'};
+    }
   }
-  printPlayerInfo(p1, p2);
-  game = new Game(p1, p2);
-  return {};
+  printPlayerInfo(players);
+  game = new Game(players);
+  return game;
 }
 function play(){
   let modal = document.getElementById('modal');
@@ -61,34 +62,34 @@ function cardEventHandlers(arr, player = null){
     let index = arr[i].getAttribute('index');
     let name = arr[i].getAttribute('src');
     if(player !== null){
-      arr[i].addEventListener('click', function(){
+      arr[i].onclick = function _func(){
         let isChanged = game.players[player].createNextCheck(parseInt(index), name);
         if(isChanged){
           printCards();
         }
-      })
+      }
     } else {
-      arr[i].addEventListener('click', function(){
+      arr[i].onclick = function _func(){
         console.log('clicked')
         game.drawCard(parseInt(i));
         printCards();
-      })
+      }
     }
   }
 }
 function printCards(){
   if(game !== null){
-    cardMaker('handOne', 'handImg', game.players[0].hand, 0);
-    cardMaker('handTwo', 'handImg', game.players[1].hand, 1);
+    cardMaker('hand0', 'handImg', game.players[0].hand, 0);
+    cardMaker('hand1', 'handImg', game.players[1].hand, 1);
     cardMaker('cardpool', 'cardPoolImg', game.deck.cards);
   }
   return;
 }
-function printPlayerInfo(p1, p2){
-  let p1Node = document.createTextNode(p1);
-  document.getElementById('p1Display').appendChild(p1Node);
-  let p2Node = document.createTextNode(p2);
-  document.getElementById('p2Display').appendChild(p2Node);
+function printPlayerInfo(players){
+  for(let i = 0; i < players.length; i++){
+    let node = document.createTextNode(players[i]);
+    document.getElementById('p'+i+'Display').appendChild(node);
+  }
   return;
 }
 function toggleShow(element){

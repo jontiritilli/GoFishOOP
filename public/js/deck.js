@@ -18,7 +18,7 @@ class Deck {
   }
   giveCard(index){
     const card = this.cards[index];
-    this.cards.splice(index,1);
+    this.cards = [...this.cards.slice(0,index),...this.cards.slice(index+1)];
     return card;
   }
 }

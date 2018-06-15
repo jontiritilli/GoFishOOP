@@ -1,6 +1,8 @@
 class Game {
-  constructor(playOne, playTwo){
-    this.players = [new Player(0, playOne), new Player(1, playTwo)];
+  constructor(names){
+    this.players = names.map(function(name, index){
+      return new Player({id: index, name: name})
+    });
     this.scoreboard = [];
     this.deck = new Deck;
     this.playerTurn = 0;
@@ -31,20 +33,19 @@ class Game {
     this.playerTurn++;
     return this.playerTurn;
   }
-  drawCard(i){
-    const card = this.deck.giveCard(i);
+  drawCard(index){
+    const card = this.deck.giveCard(index);
     this.players[this.playerTurn].getCard(card);
     this.nextTurn();
+    this.pauseOpponentClicks();
     return this.playerTurn;
   }
-  pausePlayerClicks(){
-    let opponent = this.playerTurn===0? 1 : 0
-    let container = document.querySelectorAll('img[player]');
-    console.log(container);
-    let array = container.querySelectorAll('img[player='+this.playerTurn+']');
-    console.log(array);
-    array.forEach(function(card){
-
-    })
+  pauseOpponentClicks(){
+    let opponent = this.playerTurn===0? 1 : 0;
+    let container = Array.from(document.getElementById('hand'+opponent).childNodes);
+    console.log(container)
+    for(let i = 0; i < container.length; i++){
+      container[i].onclick = null;
+    }
   }
 }

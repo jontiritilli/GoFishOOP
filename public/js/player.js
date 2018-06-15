@@ -1,11 +1,11 @@
 class Player {
-  constructor(id, name){
+  constructor(player){
       this.hand = [];
-      this.playerName = name;
+      this.playerName = player.name;
       this.matches = 0;
       this.discarded = [];
       this.nextMatchToCheck = [];
-      this.playerId = id;
+      this.playerId = player.id;
       this.giveCard = this.giveCard.bind(this);
   }
   createNextCheck(index,name){
@@ -14,17 +14,18 @@ class Player {
     }
     if(this.nextMatchToCheck.length === 1 && this.nextMatchToCheck[0].name !== name){
       this.nextMatchToCheck.push({index,name});
-      return this.checkMatches(this.nextMatchToCheck[0], this.nextMatchToCheck[1]);
+      return this.checkMatches(this.nextMatchToCheck);
     }
     return false;
   }
-  checkMatches(card1, card2){
-    let index1 = card1.name.lastIndexOf('/')+1;
-    let index2 = card2.name.lastIndexOf('/')+1;
-    if(card1.name[index1] === card2.name[index2]){
+  checkMatches(cards){
+    let values = cards.map(function(card){
+      return card.name[card.name.lastIndexOf('/')+1]
+    });
+    if(values[0] === values[1]){
       this.matches++;
       this.nextMatchToCheck = [];
-      this.discardMatches([card1, card2]);
+      this.discardMatches(cards);
       return true;
     }
     this.nextMatchToCheck = [];
@@ -39,8 +40,9 @@ class Player {
     return;
   }
   giveCard(payload){
-    let dispatch = []
-    let cards = [...payload];
+    let dispatch = [];
+    //sorting here by index to remove cards from right to left, to avoid fouling organization and removing wrong card
+    let cards = payload.sort(function(a,b){return b.index-a.index})
     for(let card of cards){
       dispatch.push(this.hand[card.index]);
       this.hand = [...this.hand.slice(0,card.index),...this.hand.slice(card.index+1)];
