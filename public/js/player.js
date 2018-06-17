@@ -1,7 +1,7 @@
 class Player {
   constructor(player){
       this.hand = [];
-      this.playerName = player.name;
+      this.name = player.name;
       this.score = 0;
       this.discarded = [];
       this.nextMatchToCheck = [];
@@ -26,7 +26,7 @@ class Player {
       this.score++;
       this.nextMatchToCheck = [];
       this.discardMatches(cards);
-      return true;
+      return {isChanged: true, hand: this.hand};
     }
     this.nextMatchToCheck = [];
     return false;

@@ -37,15 +37,21 @@ class Game {
     const card = this.deck.giveCard(index);
     this.players[this.playerTurn].getCard(card);
     this.nextTurn();
-    this.pauseOpponentClicks();
+    return this.playerTurn;
+  }
+  drawFive(){
+    for(let i = 0; i < 5; i++){
+      const card = this.deck.giveCard(0);
+      this.players[this.playerTurn].getCard(card)
+    }
     return this.playerTurn;
   }
   pauseOpponentClicks(){
     let opponent = this.playerTurn===0? 1 : 0;
     let container = Array.from(document.getElementById('hand'+opponent).childNodes);
-    console.log(container)
     for(let i = 0; i < container.length; i++){
       container[i].onclick = null;
     }
+  return;
   }
 }
