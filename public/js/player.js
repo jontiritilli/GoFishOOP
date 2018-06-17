@@ -2,7 +2,7 @@ class Player {
   constructor(player){
       this.hand = [];
       this.playerName = player.name;
-      this.matches = 0;
+      this.score = 0;
       this.discarded = [];
       this.nextMatchToCheck = [];
       this.playerId = player.id;
@@ -23,7 +23,7 @@ class Player {
       return card.name[card.name.lastIndexOf('/')+1]
     });
     if(values[0] === values[1]){
-      this.matches++;
+      this.score++;
       this.nextMatchToCheck = [];
       this.discardMatches(cards);
       return true;

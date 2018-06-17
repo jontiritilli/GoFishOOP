@@ -14,8 +14,8 @@ function newGame(){
       return {error: 'please enter more than 2 characters'};
     }
   }
-  printPlayerInfo(players);
   game = new Game(players);
+  printPlayerInfo(game.players);
   return game;
 }
 function play(){
@@ -30,12 +30,17 @@ function play(){
   printCards();
   return;
 };
-function cardMaker(elementToName, elementToClass, array, player){
-  let element = document.getElementById(elementToName);
+function cardMaker(payload){
+  let id = null || payload.id;
+  let array = null || payload.array;
+  let elementClass = null || payload.elementClass;
+  let player = null || payload.player;
+  let image = null || payload.image;
+  let element = document.getElementById(id)
   //empty div before building
   while(element.firstChild){
     element.removeChild(element.firstChild)
-  }
+  };
   let cards = [];
   for(let i = 0; i<array.length; i++){
     let img = document.createElement('img');
@@ -43,8 +48,8 @@ function cardMaker(elementToName, elementToClass, array, player){
     let cl = document.createAttribute('class');
     let index = document.createAttribute('index');
     let pNum = player ? document.createAttribute('player'): document.createAttribute('deck');
-    src.value = array[i];
-    cl.value = elementToClass;
+    src.value = image || array[i];
+    cl.value = elementClass;
     index.value = i;
     pNum.value = player;
     img.setAttributeNode(src);
@@ -55,6 +60,7 @@ function cardMaker(elementToName, elementToClass, array, player){
     cards.push(img);
   }
   cardEventHandlers(cards, player);
+  printPlayerInfo(game.players);
   return;
 }
 function cardEventHandlers(arr, player = null){
@@ -79,16 +85,22 @@ function cardEventHandlers(arr, player = null){
 }
 function printCards(){
   if(game !== null){
-    cardMaker('hand0', 'handImg', game.players[0].hand, 0);
-    cardMaker('hand1', 'handImg', game.players[1].hand, 1);
-    cardMaker('cardpool', 'cardPoolImg', game.deck.cards);
+    cardMaker({id:'hand0', elementClass:'handImg', array: game.players[0].hand, player: 0});
+    cardMaker({id: 'hand1', elementClass: 'handImg', array: game.players[1].hand, player: 1});
+    cardMaker({id: 'cardpool', elementClass: 'cardPoolImg', array: game.deck.cards, player: null, image: game.deck.cardBack});
   }
   return;
 }
 function printPlayerInfo(players){
   for(let i = 0; i < players.length; i++){
-    let node = document.createTextNode(players[i]);
-    document.getElementById('p'+i+'Display').appendChild(node);
+    let element = document.getElementById('p'+players[i].playerId+'Display');
+    while(element.firstChild){
+      element.removeChild(element.firstChild)
+    };
+    let name = document.createTextNode(players[i].playerName);
+    let score = document.createTextNode(players[i].score);
+    element.appendChild(name);
+    element.appendChild(score);
   }
   return;
 }
