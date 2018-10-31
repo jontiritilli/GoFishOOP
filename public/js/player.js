@@ -6,7 +6,8 @@ class Player {
       this.discarded = [];
       this.nextMatchToCheck = [];
       this.playerId = player.id;
-      this.giveCard = this.giveCard.bind(this);
+      this.giveCards = this.giveCards.bind(this);
+      this.giveOneCard = this.giveOneCard.bind(this);
   }
   createNextCheck(index,name){
     if(!this.nextMatchToCheck.length){
@@ -32,14 +33,19 @@ class Player {
     return false;
   }
   discardMatches(cards){
-    let discards = this.giveCard(cards);
+    let discards = this.giveCards(cards);
     this.discarded = [...this.discarded, ...discards];
   }
-  getCard(card){
+  getOneCard(card){
     this.hand.push(card);
     return;
   }
-  giveCard(payload){
+  giveOneCard(index){
+    let requestedCard = this.hand[index];
+    this.hand = [...this.hand.slice(0,index),...this.hand.slice(index+1)];
+    return requestedCard;
+  }
+  giveCards(payload){
     let dispatch = [];
     //sorting here by index to remove cards from right to left, to avoid fouling organization and removing wrong card
     let cards = payload.sort(function(a,b){return b.index-a.index})

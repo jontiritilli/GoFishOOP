@@ -78,7 +78,7 @@ function cardEventHandlers(arr, id, player){
       }
     } else {
       arr[i].onclick = function _func(){
-        game.drawCard(parseInt(i));
+        game.drawOneCard(parseInt(i));
         renderCards();
         game.pauseOpponentClicks();
       }
@@ -94,7 +94,7 @@ function renderCards(){
   return;
 }
 function renderPlayerInfo(players){
-  let currentPlayer = game.players[game.playerTurn].name;
+  let currentPlayer = game.players[game.CurrentPlayer].name;
   let playerDisplay = document.getElementById('currentPlayer');
   while(playerDisplay.firstChild){
     playerDisplay.removeChild(playerDisplay.firstChild)
